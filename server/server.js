@@ -9,34 +9,34 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get("/users", async (req, res) => {
+app.get("/api/user", async (req, res) => {
     ConnectToDB()
     const data = await model.find({}, " -_id -__v -password");
     res.status(200).send({ message: "successfully !", data });
 })
 
-app.get("/users/:username", async (req, res) => {
+app.get("/api/user/:username", async (req, res) => {
     ConnectToDB()
     const { username } = req.params;
     const data = await model.find({ username }, " -_id -__v -password");
     res.status(200).send({ message: "successfully !", data });
 })
 
-app.post("/users", async (req, res) => {
+app.post("/api/user", async (req, res) => {
     ConnectToDB()
     const { username, email, password } = req.body;
     await model.create({ username, email, password });
     res.status(201).send({ message: "successfully !" });
 })
 
-app.put("/users", async (req, res) => {
+app.put("/api/user", async (req, res) => {
     ConnectToDB()
     const { username, email, password } = req.body;
     await model.findOneAndUpdate({ username }, { email, password });
     res.status(200).send({ message: "successfully !" });
 })
 
-app.delete("/users", async (req, res) => {
+app.delete("/api/user", async (req, res) => {
     ConnectToDB()
     const identifier = req.body.username || req.body.email;
     await model.findOneAndDelete({ $or: [{ username: identifier }, { email: identifier }] });
